@@ -25,3 +25,20 @@ def create_mass(t, mass, mass_osc) :
   return ans 
 
 
+
+#
+#  Create covariance matrix
+#
+
+def create_covar_time(nt, decay) :
+
+  ans = np.zeros((nt,nt) )
+
+  for t1 in range(0,nt):
+    for t2 in range(0,nt):
+      dd = math.fabs(t1 - t2) 
+      ans[t1,t2] = math.exp(-dd*decay) 
+
+  return ans 
+
+

@@ -11,6 +11,7 @@ nsmear = 2
 
 #  parameters of the noise
 sig = 0.1 
+n_decay = 0.5 
 
 ##
 ##

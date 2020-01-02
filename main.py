@@ -65,10 +65,17 @@ file1 = open("corr.txt","w")
 for icfg in range(ncfg) :
   print("Creating correlator for configuration " , icfg)
 
-  for t in range(0,nt): 
-   for i in range(0,nsmear) :
-      for j in range(0,nsmear) :
-            corr[i,j, t] = corr_mean[i,j, t]  + gauss(0.0, sig)
+  for i in range(0,nsmear) :
+    for j in range(0,nsmear) :
+       covar = corrlib.create_covar_time(nt, n_decay) 
+       g_noise  = np.zeros( (nt )  )
+       for t in range(0,nt): 
+          g_noise[t] = gauss(0.0, sig)
+
+       gv = np.matmul(covar, g_noise)
+
+       for t in range(0,nt): 
+            corr[i,j, t] = corr_mean[i,j, t]  + gv[t]
 
   for i in range(0,nsmear) :
     for j in range(0,nsmear) :
