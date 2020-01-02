@@ -5,27 +5,7 @@ import math
 from random import seed
 from random import gauss
 
-#
-#  exp(-m_i t) + (-1)**t 
-#
-
-def create_mass(t, mass, mass_osc) :
-
-  n = len(mass)
-  n_osc = len(mass_osc)
-  nT = n+n_osc
-  ans = np.zeros((nT,nT) )
-
-  for i in range(0,n):
-    ans[i,i] = math.exp( - t * mass[i] )
-
-  for i in range(0,n_osc):
-    ans[n+i,n+i]  = (-1)**(t) * math.exp( - t * mass_osc[i] )
-
-  return ans 
-
-
-
+import corrlib
 
 ##
 ##
@@ -43,8 +23,6 @@ sig = 0.1
 ##
 ##
 
-print ("Starting to create the correlators")
-print("Length of time direction " , nt)
 
 mass = [ 0.4 , 0.6 , 0.9]
 mass_osc = [ 0.5 , 0.65 ]
@@ -53,7 +31,8 @@ A = np.array([ [ 1.5 , 1.7 , 1.9 , 0.21 , 0.23   ] ,  [ 1.02 , 1.13 , 1.02 , 0.1
 
 
 
-
+print ("Starting to create the correlators")
+print("Length of time direction " , nt)
 
 ttt = A.shape
 n_smear = ttt[0]
@@ -82,7 +61,7 @@ print(A)
 print("Creation of population model")
 
 for t in range(0,nt):
- m_exp =  create_mass(t, mass, mass_osc)
+ m_exp =  corrlib.create_mass(t, mass, mass_osc)
  print("Time " , t)
 ## for ddd in m_exp :
 ##   print(ddd)
