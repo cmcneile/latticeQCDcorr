@@ -85,3 +85,24 @@ for icfg in range(ncfg) :
 
 
 file1.close() 
+
+
+#
+#
+#
+
+print("Model parameters")
+
+for m in mass:
+  print("Mass " , m)
+
+for m in mass_osc:
+  print("Oscillatory mass " , m)
+
+for ss in range(0,n_smear) :
+  print("Smearing function " , ss)
+  print("Wave = " , end =  " " )
+  for istate in range(0, n_state) :
+     print(A[ss, istate] , end =  " " ) 
+
+print(" ") 
