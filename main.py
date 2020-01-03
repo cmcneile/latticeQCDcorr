@@ -59,15 +59,21 @@ for t in range(0,nt):
 print("Starting the simulations")
 
 corr = np.zeros( (nsmear,nsmear, nt )  )
+##covar = corrlib.create_covar_time(nt, n_decay) 
+covar = corrlib.create_diag_covar_time(nt) 
 
-file1 = open("corr.txt","w")
+try:
+  file1 = open(corr_name,"w")
+except:
+  print("ERROR opening the file " , corr_name )
+  sys.exit(1)
 
 for icfg in range(ncfg) :
   print("Creating correlator for configuration " , icfg)
 
   for i in range(0,nsmear) :
     for j in range(0,nsmear) :
-       covar = corrlib.create_covar_time(nt, n_decay) 
+
        g_noise  = np.zeros( (nt )  )
        for t in range(0,nt): 
           g_noise[t] = gauss(0.0, sig)
@@ -75,12 +81,15 @@ for icfg in range(ncfg) :
        gv = np.matmul(covar, g_noise)
 
        for t in range(0,nt): 
-            corr[i,j, t] = corr_mean[i,j, t]  + gv[t]
+            corr[i,j, t] = corr_mean[i,j, t] * (1.0   + gv[t] )
 
-  for i in range(0,nsmear) :
-    for j in range(0,nsmear) :
+#  for i in range(0,nsmear) :
+#    for j in range(0,nsmear) :
+  for i in range(0,1) :
+    for j in range(0,1) :
+       file1.write("CORR ") 
        for t in range(0,nt): 
-         file1.write(str(corr_mean[i,j, t]) + " ") 
+         file1.write(str(corr[i,j, t]) + " ") 
        file1.write("\n") 
 
 
@@ -106,3 +115,5 @@ for ss in range(0,n_smear) :
      print(A[ss, istate] , end =  " " ) 
 
 print(" ") 
+
+print("Correlators written to " , corr_name)
