@@ -7,7 +7,9 @@ from random import gauss
 
 # my modules
 import corrlib
-from simulation import *
+##from simulation import *
+##from simulation_osc import *
+from simulation_osc_smear1 import *
 
 print ("Starting to create the correlators")
 print("Length of time direction " , nt)
@@ -19,11 +21,11 @@ n_state = ttt[1]
 # sanity check, states and smearing functions
 n_exp = len(mass) + len(mass_osc)
 if n_state != n_exp  :
-  print("ERROR " , n_state , "!=",  n_exp)
+  print("ERROR n_state != n_exp " , n_state , "!=",  n_exp)
   sys.exit(1)
 
 if n_smear !=  nsmear : 
-  print("ERROR " , n_smear , "!=" ,   nsmear  ) 
+  print("ERROR n_smear !=  nsmear " , n_smear , "!=" ,   nsmear  ) 
   sys.exit(1)
 
 print("Number of smearing functions = " , n_smear  )
@@ -39,13 +41,20 @@ print(A)
 print("Creation of population model")
 
 for t in range(0,nt):
- m_exp =  corrlib.create_mass(t, mass, mass_osc)
+## m_exp =  corrlib.create_mass(t, mass, mass_osc)
+ m_exp =  corrlib.create_mass_peroid(t, mass, mass_osc, nt)
  print("Time " , t)
 ## for ddd in m_exp :
 ##   print(ddd)
 
- tmp = np.matmul(A, m_exp)
- cmean = np.matmul(tmp, Atrans)
+ cmean = np.zeros( (nsmear,nsmear)  )
+ if nsmear > 1 :
+   tmp = np.matmul(A, m_exp)
+   cmean = np.matmul(tmp, Atrans)
+ else:
+   cmean[0,0] = 0.0
+   for ii in range(0,len(m_exp)) :
+      cmean[0,0] = cmean[0,0] + m_exp[ii,ii] * A[0,ii]**2
 
  print(cmean)
  for i in range(0,nsmear) :
@@ -113,6 +122,7 @@ for ss in range(0,n_smear) :
   print("Wave = " , end =  " " )
   for istate in range(0, n_state) :
      print(A[ss, istate] , end =  " " ) 
+  print("")
 
 print(" ") 
 
