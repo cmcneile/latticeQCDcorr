@@ -8,8 +8,10 @@ from random import gauss
 # my modules
 import corrlib
 ##from simulation import *
+##from simulation_osc_smear1_B import *
+from simulation_osc_smear1_A import *
 ##from simulation_osc import *
-from simulation_osc_smear1 import *
+##from simulation_osc_smear1 import *
 
 print ("Starting to create the correlators")
 print("Length of time direction " , nt)
@@ -36,7 +38,7 @@ Atrans = A.transpose()
 
 corr_mean = np.zeros( (nsmear,nsmear, nt )  )
 
-print(A) 
+##print(A) 
 
 print("Creation of population model")
 
@@ -44,8 +46,8 @@ for t in range(0,nt):
 ## m_exp =  corrlib.create_mass(t, mass, mass_osc)
  m_exp =  corrlib.create_mass_peroid(t, mass, mass_osc, nt)
  print("Time " , t)
-## for ddd in m_exp :
-##   print(ddd)
+ for ddd in m_exp :
+      print(ddd)
 
  cmean = np.zeros( (nsmear,nsmear)  )
  if nsmear > 1 :
@@ -56,7 +58,7 @@ for t in range(0,nt):
    for ii in range(0,len(m_exp)) :
       cmean[0,0] = cmean[0,0] + m_exp[ii,ii] * A[0,ii]**2
 
- print(cmean)
+# print(cmean)
  for i in range(0,nsmear) :
    for j in range(0,nsmear) :
      corr_mean[i,j, t] = cmean[i,j]
@@ -78,7 +80,7 @@ except:
   sys.exit(1)
 
 for icfg in range(ncfg) :
-  print("Creating correlator for configuration " , icfg)
+#  print("Creating correlator for configuration " , icfg)
 
   for i in range(0,nsmear) :
     for j in range(0,nsmear) :
